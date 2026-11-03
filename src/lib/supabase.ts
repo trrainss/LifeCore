@@ -7,9 +7,7 @@ export const isSupabaseConfigured = Boolean(url && anonKey);
 
 export const supabaseConfigStatus: "ok" | "missing" | "suspicious" = (() => {
   if (!url || !anonKey) return "missing";
-  // Новый формат publishable-ключей Supabase заметно длиннее 60 символов.
-  // Короткий ключ почти наверняка вставлен не полностью.
-  if (anonKey.length < 60 || !url.includes(".supabase.co")) return "suspicious";
+  if (anonKey.length < 30 || !url.includes(".supabase.co")) return "suspicious";
   return "ok";
 })();
 
