@@ -1,0 +1,76 @@
+import { useState, type FormEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import {
+  AuthShell,
+  AuthField,
+  AuthError,
+  SubmitButton,
+  useAuthForm,
+} from "./AuthParts";
+
+export default function Register() {
+  const { signUp } = useAuth();
+  const navigate = useNavigate();
+  const { email, setEmail, password, setPassword, error, busy, guard } = useAuthForm();
+  const [userName, setUserName] = useState("");
+
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    guard(async () => {
+      const err = await signUp(email.trim(), password, userName.trim() || "Друг");
+      if (!err) navigate("/");
+      return null;
+    });
+  };
+
+  return (
+    <AuthShell
+      footer={
+        <>
+          Уже есть аккаунт?{" "}
+          <Link to="/login" className="font-medium text-core-accent hover:underline">
+            Войти
+          </Link>
+        </>
+      }
+    >
+      <h2 className="text-lg font-bold tracking-tight">Регистрация</h2>
+      <p className="mt-1 text-sm text-core-muted">Создайте аккаунт — данные будут только вашими</p>
+
+      <form onSubmit={submit} className="mt-5 space-y-4">
+        <AuthField
+          label="Как вас называть"
+          type="text"
+          value={userName}
+          onChange={setUserName}
+          placeholder="Имя"
+          autoComplete="given-name"
+        />
+        <AuthField
+          label="Email"
+          type="email"
+          value={email}
+          onChange={setEmail}
+          placeholder="you@example.com"
+          autoComplete="email"
+        />
+        <AuthField
+          label="Пароль"
+          type="password"
+          value={password}
+          onChange={setPassword}
+          placeholder="Минимум 6 символов"
+          autoComplete="new-password"
+        />
+        {error && <AuthError message={error} />}
+        <SubmitButton busy={busy}>Создать аккаунт</SubmitButton>
+      </form>
+
+      <p className="mt-4 text-[11px] leading-relaxed text-core-muted">
+        Если в проекте Supabase включено подтверждение email, после регистрации
+        потребуется перейти по ссылке из письма.
+      </p>
+    </AuthShell>
+  );
+}
