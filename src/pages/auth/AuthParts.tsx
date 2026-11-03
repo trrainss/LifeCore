@@ -1,5 +1,6 @@
 import { useState, type FormEvent, type ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { supabaseConfigStatus } from "../../lib/supabase";
 
 /** Общая оболочка для страниц входа/регистрации */
 export function AuthShell({
@@ -75,6 +76,17 @@ export function AuthError({ message }: { message: string }) {
   return (
     <p className="rounded-lg bg-core-bad/[0.07] px-3.5 py-2.5 text-xs leading-relaxed text-core-bad">
       {message}
+    </p>
+  );
+}
+
+export function ConfigWarning() {
+  if (supabaseConfigStatus === "ok") return null;
+  return (
+    <p className="mb-4 rounded-lg bg-[#FFB020]/[0.12] px-3.5 py-2.5 text-xs leading-relaxed text-[#8a5a00]">
+      {supabaseConfigStatus === "missing"
+        ? "Supabase не настроен: нет URL или ключа в .env. Вход и регистрация работать не будут."
+        : "Похоже, ключ Supabase в .env вставлен не полностью (слишком короткий). Скопируйте его заново из Dashboard → Settings → API."}
     </p>
   );
 }

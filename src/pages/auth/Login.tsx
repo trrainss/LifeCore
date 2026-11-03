@@ -5,6 +5,7 @@ import {
   AuthShell,
   AuthField,
   AuthError,
+  ConfigWarning,
   SubmitButton,
   useAuthForm,
 } from "./AuthParts";
@@ -31,6 +32,9 @@ export default function Login() {
     >
       <h2 className="text-lg font-bold tracking-tight">Вход</h2>
       <p className="mt-1 text-sm text-core-muted">Войдите, чтобы открыть свои данные</p>
+      <div className="mt-4">
+        <ConfigWarning />
+      </div>
 
       <form onSubmit={submit} className="mt-5 space-y-4">
         <AuthField

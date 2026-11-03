@@ -6,6 +6,7 @@ import {
   AuthShell,
   AuthField,
   AuthError,
+  ConfigWarning,
   SubmitButton,
   useAuthForm,
 } from "./AuthParts";
@@ -43,6 +44,9 @@ export default function Register() {
     >
       <h2 className="text-lg font-bold tracking-tight">Регистрация</h2>
       <p className="mt-1 text-sm text-core-muted">Создайте аккаунт — данные будут только вашими</p>
+      <div className="mt-4">
+        <ConfigWarning />
+      </div>
 
       {done ? (
         <div className="mt-5 space-y-4">
