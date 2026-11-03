@@ -101,10 +101,19 @@ export function useAuthForm() {
   const guard = async (action: () => Promise<string | null>) => {
     setBusy(true);
     setError(null);
-    const err = await action();
-    setBusy(false);
-    if (err) setError(err);
-    return !err;
+    try {
+      const err = await action();
+      if (err) setError(err);
+      return !err;
+    } catch (e) {
+      console.error("Auth error:", e);
+      setError(
+        "Не удалось связаться с сервером. Проверьте интернет и настройки Supabase (.env)."
+      );
+      return false;
+    } finally {
+      setBusy(false);
+    }
   };
 
   return { email, setEmail, password, setPassword, error, busy, guard };

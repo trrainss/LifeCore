@@ -50,17 +50,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return error ? translateAuthError(error.message) : null;
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      return error ? translateAuthError(error.message) : null;
+    } catch (e) {
+      console.error("signIn error:", e);
+      return "Не удалось связаться с сервером. Проверьте интернет и настройки Supabase (.env).";
+    }
   }, []);
 
   const signUp = useCallback(async (email: string, password: string, userName: string) => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { user_name: userName } },
-    });
-    return error ? translateAuthError(error.message) : null;
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { user_name: userName } },
+      });
+      return error ? translateAuthError(error.message) : null;
+    } catch (e) {
+      console.error("signUp error:", e);
+      return "Не удалось связаться с сервером. Проверьте интернет и настройки Supabase (.env).";
+    }
   }, []);
 
   const signOut = useCallback(async () => {
